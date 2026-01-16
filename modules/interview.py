@@ -1,5 +1,3 @@
-# test rebuild
-
 """
 EN: Interview orchestration module.
 FR: Module d'orchestration de l'entrevue.
@@ -8,7 +6,7 @@ FR: Module d'orchestration de l'entrevue.
 import json
 import random
 
-from modules.speech_utils import init_speech_services, speak_text, listen_continuous
+from modules.speech_utils import init_speech_services, speak_text, listen_once
 from modules.feedback import evaluate_answer
 from modules.suggestions import load_suggestions, suggest_answer
 from modules.correction import correct_answer
@@ -77,12 +75,12 @@ def run_interview(rounds=3):
         speak_text(synthesizer, question)
 
         # Listen until silence (10 seconds)
-        answer = listen_continuous(recognizer)
+        answer = listen_once(recognizer)
 
         # ============================================================
         #  HANDLE SILENCE
         # ============================================================
-        if answer == "__NO_SPEECH__":
+        if not answer:
             print("\nNo speech detected.")
             speak_text(synthesizer, "Je n'ai rien entendu... Cependant ici une petite suggestion.")
 
@@ -123,7 +121,7 @@ def run_interview(rounds=3):
         corrected = correct_answer(answer)
 
         print("\nCorrected version:")
-        print(corrected)
+        #print(corrected)
 
         speak_text(synthesizer, "Voici une version corrigée de ta réponse.")
         speak_text(synthesizer, corrected)
@@ -134,7 +132,7 @@ def run_interview(rounds=3):
         suggested = suggest_answer(question, suggestions_dict)
 
         print("\nSuggested answer:")
-        print(suggested)
+        #print(suggested)
 
         speak_text(synthesizer, "Et maintenant, voici une suggestion professionnelle.")
         speak_text(synthesizer, suggested)

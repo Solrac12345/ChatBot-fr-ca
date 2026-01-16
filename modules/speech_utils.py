@@ -120,3 +120,15 @@ def listen_continuous(recognizer, silence_limit_sec=10):
 
     final_text = " ".join(full_text).strip()
     return final_text
+
+def listen_once(recognizer):
+    print("Listening...")
+    result = recognizer.recognize_once()
+
+    if result.reason == speechsdk.ResultReason.RecognizedSpeech:
+        text = result.text.strip()
+        print(f"Recognized: {text}")
+        return text
+
+    print("No speech detected.")
+    return ""
